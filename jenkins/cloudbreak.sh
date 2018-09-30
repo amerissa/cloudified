@@ -11,10 +11,7 @@ cb credential list | grep Name | grep -q $client || cb credential create aws key
 
 #Password Management
 
-if [ ! -f ./$client ]; then
-  random-string 16 > ./$client
-fi
-
+password=`random-string 16`
 
 #Upload recipes
 cp cloudbreak/recipes/postinstall .
