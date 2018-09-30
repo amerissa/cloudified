@@ -1,0 +1,21 @@
+#!/bin/bash
+yum -y install cyrus*
+
+mkdir -p /hadoopfs/fs1/yarn
+chmod 777 /hadoopfs/fs1/yarn
+mkdir -p /hadoopfs/fs1/buffer
+chmod 777 /hadoopfs/fs1/buffer
+mkdir -p /hadoopfs/fs1/kafka
+chmod 777 /hadoopfs/fs1/kafka
+mount -o remount,exec /tmp/
+echo "PASSWORD" | passwd --stdin cloudbreak
+
+if yum list installed | grep ambari-server; then
+  echo "host   all    all 0.0.0.0/0 md5" >> /var/lib/pgsql/data/pg_hba.conf
+  service postgresql reload
+  su - postgres -c "psql -c \"drop database if exists hive\""
+  su - postgres -c "psql -c \"drop role if exists hive\""
+  su - postgres -c "psql -c \"create role hive with login password 'hive'\""
+  su - postgres -c "psql -c \"create database hive with owner hive\""
+  kadmin.local -q "addprinc -pw PASSWORD cloudbreak"
+fi

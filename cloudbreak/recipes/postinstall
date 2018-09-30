@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export AMBARI_HOST=$(hostname -f)
+export username=admin
+export password=PASSWORD
+export CLUSTER_NAME=$(curl -u $username:$password -X GET http://$AMBARI_HOST:8080/api/v1/clusters |grep cluster_name|grep -Po ': "(.+)'|grep -Po '[a-zA-Z0-9\-_!?.]+')
+
+curl -u $username:$password-i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start Kafka via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' http://$AMBARI_HOST:8080/api/v1/clusters/$CLUSTER_NAME/services/KAFKA

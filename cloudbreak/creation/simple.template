@@ -1,0 +1,280 @@
+{
+  "general": {
+    "name": "",
+    "credentialName": "CLIENT"
+  },
+  "placement": {
+    "availabilityZone": "REGIONa",
+    "region": "REGION"
+  },
+  "parameters": {},
+  "inputs": {
+    "s3key": "ACCESSKEY",
+    "s3secret": "ACCESSSECRET",
+    "password": "PASSWORD"
+  },
+  "customDomain": {
+    "clusterNameAsSubdomain": false,
+    "hostgroupNameAsHostname": false
+  },
+  "tags": {
+    "userDefinedTags": {}
+  },
+  "instanceGroups": [
+    {
+      "nodeCount": 1,
+      "group": "nifi",
+      "type": "CORE",
+      "parameters": {},
+      "template": {
+        "volumeCount": 1,
+        "volumeSize": 1000,
+        "rootVolumeSize": 50,
+        "parameters": {
+          "encrypted": false
+        },
+        "volumeType": "standard",
+        "instanceType": "m5.xlarge"
+      },
+      "securityGroup": {
+        "securityRules": [
+          {
+            "subnet": "IP",
+            "ports": "22,9091",
+            "protocol": "tcp"
+          }
+        ]
+      },
+      "recipeNames": ["preinstallCLIENT"],
+      "recoveryMode": "MANUAL"
+    },
+    {
+      "nodeCount": 1,
+      "group": "master",
+      "type": "GATEWAY",
+      "parameters": {},
+      "template": {
+        "volumeCount": 1,
+        "volumeSize": 1000,
+        "rootVolumeSize": 50,
+        "parameters": {
+          "encrypted": false
+        },
+        "volumeType": "standard",
+        "instanceType": "m5.2xlarge"
+      },
+      "securityGroup": {
+        "securityRules": [
+          {
+            "subnet": "IP",
+            "ports": "443",
+            "protocol": "tcp"
+          },
+          {
+            "subnet": "54.244.16.247/32",
+            "ports": "443",
+            "protocol": "tcp"
+          },
+          {
+            "subnet": "IP",
+            "ports": "22",
+            "protocol": "tcp"
+          },
+          {
+            "subnet": "54.244.16.247/32",
+            "ports": "9443",
+            "protocol": "tcp"
+          },
+          {
+            "subnet": "IP",
+            "ports": "9443",
+            "protocol": "tcp"
+          }
+        ]
+      },
+      "recipeNames": [
+        "preinstallCLIENT",
+	      "postinstallCLIENT"
+      ],
+      "recoveryMode": "MANUAL"
+    },
+    {
+      "nodeCount": 1,
+      "group": "gateway",
+      "type": "CORE",
+      "parameters": {},
+      "template": {
+        "volumeCount": 1,
+        "volumeSize": 1000,
+        "rootVolumeSize": 50,
+        "parameters": {
+          "encrypted": false
+        },
+        "volumeType": "standard",
+        "instanceType": "m5.2xlarge"
+      },
+      "securityGroup": {
+        "securityRules": [
+          {
+            "subnet": "IP",
+            "ports": "22",
+            "protocol": "tcp"
+          },
+          {
+            "subnet": "IP",
+            "ports": "9995",
+            "protocol": "tcp"
+          },
+          {
+            "subnet": "IP",
+            "ports": "9088",
+            "protocol": "tcp"
+          },
+          {
+            "subnet": "IP",
+            "ports": "8998",
+            "protocol": "tcp"
+          }
+        ]
+      },
+      "recipeNames": ["preinstallCLIENT"],
+      "recoveryMode": "MANUAL"
+    },
+    {
+      "nodeCount": 1,
+      "group": "worker",
+      "type": "CORE",
+      "parameters": {},
+      "template": {
+        "volumeCount": 1,
+        "volumeSize": 1000,
+        "rootVolumeSize": 50,
+        "parameters": {
+          "encrypted": false
+        },
+        "volumeType": "standard",
+        "instanceType": "m5.xlarge"
+      },
+      "securityGroup": {
+        "securityRules": [
+          {
+            "subnet": "IP",
+            "ports": "22",
+            "protocol": "tcp"
+          }
+        ]
+      },
+      "recipeNames": ["preinstallCLIENT"],
+      "recoveryMode": "MANUAL"
+    },
+    {
+      "nodeCount": 1,
+      "group": "kafka",
+      "type": "CORE",
+      "parameters": {},
+      "template": {
+        "volumeCount": 1,
+        "volumeSize": 1000,
+        "rootVolumeSize": 50,
+        "parameters": {
+          "encrypted": false
+        },
+        "volumeType": "standard",
+        "instanceType": "m5.2xlarge"
+      },
+      "securityGroup": {
+        "securityRules": [
+          {
+            "subnet": "IP",
+            "ports": "22",
+            "protocol": "tcp"
+          },
+          {
+            "subnet": "IP",
+            "ports": "6667",
+            "protocol": "tcp"
+          }
+        ]
+      },
+      "recipeNames": ["preinstallCLIENT"],
+      "recoveryMode": "MANUAL"
+    },
+    {
+      "nodeCount": 2,
+      "group": "compute",
+      "type": "CORE",
+      "parameters": {},
+      "template": {
+        "volumeCount": 1,
+        "volumeSize": 100,
+        "rootVolumeSize": 50,
+        "parameters": {
+          "encrypted": false
+        },
+        "volumeType": "standard",
+        "instanceType": "m5.xlarge"
+      },
+      "securityGroup": {
+        "securityRules": [
+          {
+            "subnet": "IP",
+            "ports": "22",
+            "protocol": "tcp"
+          }
+        ]
+      },
+      "recipeNames": ["preinstallCLIENT"],
+      "recoveryMode": "MANUAL"
+    }
+  ],
+  "stackAuthentication": {
+    "publicKeyId": null,
+    "publicKey": "ssh-rsa PUBLICKEY"
+  },
+  "network": {
+    "parameters": {
+      "publicNetId": null,
+      "routerId": null,
+      "internetGatewayId": null,
+      "networkId": null,
+      "vpcId": null
+    },
+    "subnetCIDR": "10.0.0.0/16"
+  },
+  "imageSettings": {
+    "imageCatalog": "cloudbreak-default",
+    "imageId": "69db7e20-f3ac-4d45-6f95-39204e70ddcf"
+  },
+  "cluster": {
+    "emailNeeded": false,
+    "rdsConfigNames": ["hivedb"],
+    "ambari": {
+      "blueprintName": "blueprint",
+      "enableSecurity": false,
+      "userName": "admin",
+      "password": "PASSWORD",
+      "kerberos": {
+        "password": "PASSWORD",
+        "masterKey": "PASSWORD",
+        "admin": "admin",
+        "tcpAllowed": false
+      },
+      "enableSecurity": true,
+      "ambariStackDetails": {
+        "stack": "HDP",
+        "version": "3.0",
+        "stackRepoId": "HDP",
+        "enableGplRepo": false,
+        "verify": false,
+        "repositoryVersion": "3.0.1.0-187",
+        "versionDefinitionFileUrl": "http://public-repo-1.hortonworks.com/HDP/centos7/3.x/updates/3.0.1.0/HDP-3.0.1.0-187.xml",
+        "mpacks": [{"name": "hdf32"}]
+      },
+      "ambariRepoDetailsJson": {
+        "version": "2.7.1.0",
+        "baseUrl": "http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.7.1.0",
+        "gpgKeyUrl": "http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7/2.x/BUILDS/2.7.0.0-508/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins"
+      }
+    }
+  }
+}
