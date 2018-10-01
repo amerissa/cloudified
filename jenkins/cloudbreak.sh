@@ -43,7 +43,7 @@ status=`cb cluster describe --name $client | jenkins/parser.py status`
 echo $status
 while kill -0 $PID 2>/dev/null; do
   sleep 10
-  newstatus=`cb cluster describe --name $client | jenkins/parser.py status`
+  newstatus=`cb cluster describe --name $client 2>/dev/null| jenkins/parser.py status 2>/dev/null`
   if [ "$status" != "$newstatus" ]; then
     echo $newstatus
   fi

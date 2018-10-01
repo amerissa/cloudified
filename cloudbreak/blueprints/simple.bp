@@ -20,7 +20,7 @@
       "superset-env": {
         "properties": {
           "superset_admin_password": "{{{password}}}",
-          "superset_admin_username": "cloudbreak",
+          "superset_admin_user": "cloudbreak",
           "superset_admin_lastname": "admin",
           "superset_admin_email": "identity.user@email.com",
           "superset_admin_firstname": "username"
